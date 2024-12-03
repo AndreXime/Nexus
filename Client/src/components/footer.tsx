@@ -1,41 +1,52 @@
-import Link from 'next/link';
+"use client";
+import { Box, Typography, Link, Divider } from "@mui/material";
+import NextLink from "next/link";
+import { useTheme } from "@mui/material/styles";
 
 const Footer: React.FC = () => {
+  const theme = useTheme(); // Usar o tema atual
   return (
-    <footer className='mt-4'>
-      <ul className='nav justify-content-center p-3 text-bg-dark'>
-        <li className='nav-item'>
-          <span className='text-bg-dark nav-link px-2'>
-            &copy; 2022 Company, Inc
-          </span>
-        </li>
-        <li className='nav-item'>
-          <Link href='/' className='nav-link px-2'>
+    <Box
+      component='footer'
+      sx={{
+        backgroundColor: theme.palette.background.default, // Usando a cor de fundo do tema
+        color: theme.palette.text.primary, // Usando a cor do texto definida no tema
+        py: 2,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ display: "flex", gap: 3 }}>
+          <Link component={NextLink} href='/' color='inherit' underline='none'>
             Home
           </Link>
-        </li>
-        <li className='nav-item'>
-          <Link href='#' className='nav-link px-2 '>
+          <Link component={NextLink} href='#' color='inherit' underline='none'>
             Features
           </Link>
-        </li>
-        <li className='nav-item'>
-          <Link href='#' className='nav-link px-2 '>
+          <Link component={NextLink} href='#' color='inherit' underline='none'>
             Pricing
           </Link>
-        </li>
-        <li className='nav-item'>
-          <Link href='#' className='nav-link px-2'>
+          <Link component={NextLink} href='#' color='inherit' underline='none'>
             FAQs
           </Link>
-        </li>
-        <li className='nav-item'>
-          <Link href='#' className='nav-link px-2'>
+          <Link component={NextLink} href='#' color='inherit' underline='none'>
             About
           </Link>
-        </li>
-      </ul>
-    </footer>
+        </Box>
+
+        <Divider sx={{ my: 2, width: "100%", backgroundColor: "white" }} />
+
+        <Typography variant='body2' sx={{ mb: 2 }}>
+          &copy; 2022 NEXUS FINNANCE, Inc
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,4 +1,5 @@
-import '../styles/popup.css';
+import React from "react";
+import { Dialog, DialogContent, DialogActions, Button, Typography } from "@mui/material";
 
 interface PopupProps {
   isOpen: boolean; // Controla a visibilidade do popup
@@ -7,24 +8,24 @@ interface PopupProps {
 }
 
 const Popup: React.FC<PopupProps> = ({ isOpen, message, onClose }) => {
-  if (!isOpen) return null;
-
   return (
-    <div className='popup'>
-      <div className='popup-content'>
-        <p>
-          {message.split('\n').map((line, index) => (
-            <span key={index}>
+    <Dialog open={isOpen} onClose={onClose} aria-labelledby='popup-title' maxWidth='sm' fullWidth>
+      <DialogContent>
+        <Typography id='popup-title' variant='body1'>
+          {message.split("\n").map((line, index) => (
+            <React.Fragment key={index}>
               {line}
               <br />
-            </span>
+            </React.Fragment>
           ))}
-        </p>
-        <button className='btn btn-primary' onClick={onClose}>
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button variant='contained' color='primary' onClick={onClose}>
           Fechar
-        </button>
-      </div>
-    </div>
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

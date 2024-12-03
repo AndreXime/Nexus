@@ -1,51 +1,86 @@
-import Link from 'next/link';
+"use client";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  useMediaQuery,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import Link from "next/link";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
 
 const Navbar: React.FC = () => {
+  const [open, setOpen] = useState(false);
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+  const toggleDrawer = (open: boolean) => {
+    setOpen(open);
+  };
+
+  const links = [
+    { label: "Inicio", href: "/" },
+    { label: "Funcionalidades", href: "/#funcionalidades" },
+    { label: "Planos", href: "#" },
+    { label: "FAQ", href: "#" },
+    { label: "Sobre", href: "#sobre-nos" },
+  ];
+
   return (
-    <nav className='p-3 mb-4'>
-      <div className='container'>
-        <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start'>
-          <ul className='nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 text-start'>
-            <li>
-              <Link href='/' className='nav-link px-2 text-white'>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/#funcionalidades'
-                className='nav-link px-2 text-white'
+    <AppBar position='sticky'>
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+          padding: { sm: "0 16px", xs: "0 8px" },
+        }}
+      >
+        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+          NEXUS FINNANCE
+        </Typography>
+
+        {isMobile ? (
+          <IconButton color='inherit' edge='end' onClick={() => toggleDrawer(true)}>
+            <MenuIcon />
+          </IconButton>
+        ) : (
+          <Box sx={{ display: "flex", gap: 2 }}>
+            {links.map((link) => (
+              <Button
+                key={link.label}
+                component={Link}
+                href={link.href}
+                color='inherit'
+                sx={{ textTransform: "none" }}
               >
-                Features
-              </Link>
-            </li>
-            <li>
-              <Link href='#' className='nav-link px-2 text-white'>
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link href='#' className='nav-link px-2 text-white'>
-                FAQs
-              </Link>
-            </li>
-            <li>
-              <Link href='#sobre-nos' className='nav-link px-2 text-white'>
-                About
-              </Link>
-            </li>
-          </ul>
-          <div className='text-end'>
-            <Link
-              href='/acess'
-              className='btn btn-warning btn-outline-light me-2'
-            >
-              Começar Agora
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
+                {link.label}
+              </Button>
+            ))}
+          </Box>
+        )}
+
+        <Button component={Link} href='/acess' variant='outlined' color='secondary' sx={{ marginLeft: 2 }}>
+          Começar Agora
+        </Button>
+      </Toolbar>
+
+      <Drawer anchor='right' open={open} onClose={() => toggleDrawer(false)}>
+        <Box sx={{ width: 250 }} role='presentation' onClick={() => toggleDrawer(false)}>
+          <List>
+            {links.map((link) => (
+              <ListItem key={link.label} component={Link} href={link.href}>
+                <ListItemText primary={link.label} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </AppBar>
   );
 };
 

@@ -1,30 +1,30 @@
-'use client';
-import { useState } from 'react';
-import Popup from '../../components/popup';
-import '../../styles/font-awesome/css/all.min.css';
+"use client";
+import { useState } from "react";
+import { TextField, Button, Box, Typography, Card, CardContent } from "@mui/material";
+import Popup from "../../components/popup";
 
 const LoginPage: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   const toggleForm = () => setIsRegistering(!isRegistering);
 
   const submitLogin = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target); // Cria um objeto FormData com os inputs
+    const formData = new FormData(event.target);
     const payload = {
-      email: formData.get('email'),
-      senha: formData.get('password'),
+      email: formData.get("email"),
+      senha: formData.get("password"),
     };
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: 'include',
+        credentials: "include",
       });
       const jsonData = await response.json();
       if (!response.ok) {
@@ -40,24 +40,24 @@ const LoginPage: React.FC = () => {
 
   const submitRegister = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target); // Cria um objeto FormData com os inputs
+    const formData = new FormData(event.target);
     const payload = {
-      email: formData.get('email'),
-      nome: formData.get('nome'),
-      senha: formData.get('senha'),
+      email: formData.get("email"),
+      nome: formData.get("nome"),
+      senha: formData.get("senha"),
     };
     try {
-      const response = await fetch('http://localhost:3001/api/registro', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/api/registro", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: 'include',
+        credentials: "include",
       });
       const jsonData = await response.json();
       if (!response.ok) {
-        throw new Error(jsonData.errors.join('\n'));
+        throw new Error(jsonData.errors.join("\n"));
       }
       setPopupMessage(`Sucesso: ${jsonData.response}`);
     } catch (err) {
@@ -72,118 +72,56 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <main className='container d-flex justify-content-center align-items-center'>
-      <div className='card p-5' style={{ width: '70vh' }}>
-        <h1 className='text-center mb-4'>
-          {isRegistering ? 'Criar Conta' : 'Entrar'}
-        </h1>
-        {isRegistering ? (
-          <>
-            <form onSubmit={submitRegister}>
-              <div className='mb-4'>
-                <label htmlFor='name' className='form-label'>
-                  Nome
-                </label>
-                <input
-                  type='text'
-                  className='form-control'
-                  name='nome'
-                  required
-                />
-              </div>
-              <div className='mb-4'>
-                <label htmlFor='email' className='form-label'>
-                  Email
-                </label>
-                <input
-                  type='email'
-                  className='form-control'
-                  name='email'
-                  required
-                />
-              </div>
-              <div className='mb-4'>
-                <label htmlFor='password' className='form-label'>
-                  Senha
-                </label>
-                <input
-                  type='password'
-                  className='form-control'
-                  name='senha'
-                  required
-                />
-              </div>
-              <div className='mb-4'>
-                <label htmlFor='password' className='form-label'>
-                  Repita a senha
-                </label>
-                <input
-                  type='password'
-                  className='form-control'
+    <main style={{ background: "#303030" }}>
+      <Box display='flex' justifyContent='center' alignItems='center' height='90vh'>
+        <Card sx={{ width: "100%", maxWidth: 400, p: 3 }}>
+          <CardContent>
+            <Typography variant='h4' align='center' gutterBottom>
+              {isRegistering ? "Criar Conta" : "Entrar"}
+            </Typography>
+            {isRegistering ? (
+              <form onSubmit={submitRegister}>
+                <TextField label='Nome' name='nome' type='text' fullWidth margin='normal' required />
+                <TextField label='Email' name='email' type='email' fullWidth margin='normal' required />
+                <TextField label='Senha' name='senha' type='password' fullWidth margin='normal' required />
+                <TextField
+                  label='Repita a Senha'
                   name='senhaConfirm'
-                  required
-                />
-              </div>
-              <button type='submit' className='btn btn-warning w-100'>
-                Registrar
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <form onSubmit={submitLogin}>
-              <div className='mb-4'>
-                <label htmlFor='email' className='form-label'>
-                  Email
-                </label>
-                <input
-                  type='email'
-                  className='form-control'
-                  name='email'
-                  required
-                />
-              </div>
-              <div className='mb-4'>
-                <label htmlFor='password' className='form-label'>
-                  Senha
-                </label>
-                <input
                   type='password'
-                  className='form-control'
-                  name='password'
+                  fullWidth
+                  margin='normal'
                   required
                 />
-              </div>
-              <div className='mb-4 form-check'>
-                <input
-                  type='checkbox'
-                  className='form-check-input'
-                  id='rememberMe'
-                />
-                <label className='form-check-label' htmlFor='rememberMe'>
-                  Lembrar de mim
-                </label>
-              </div>
-              <button type='submit' className='btn btn-warning w-100'>
-                Entrar
-              </button>
-            </form>
-          </>
-        )}
-        <div className='mt-3 text-center'>
-          <button className='btn btn-link' onClick={toggleForm}>
-            {isRegistering
-              ? 'Já tem uma conta? Faça login'
-              : 'Ainda não tem uma conta? Registre-se'}
-          </button>
-        </div>
-      </div>
-      <Popup
-        isOpen={popupOpen}
-        message={popupMessage}
-        onClose={handleClosePopup}
-      />
+                <Button type='submit' variant='contained' color='primary' fullWidth sx={{ mt: 2 }}>
+                  Registrar
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={submitLogin}>
+                <TextField label='Email' name='email' type='email' fullWidth margin='normal' required />
+                <TextField label='Senha' name='password' type='password' fullWidth margin='normal' required />
+                <Box display='flex' alignItems='center' justifyContent='space-between' mt={2}>
+                  <label>
+                    <input type='checkbox' /> Lembrar de mim
+                  </label>
+                </Box>
+                <Button type='submit' variant='contained' color='primary' fullWidth sx={{ mt: 2 }}>
+                  Entrar
+                </Button>
+              </form>
+            )}
+            <Box mt={2} textAlign='center'>
+              <Button onClick={toggleForm} variant='text' color='secondary'>
+                {isRegistering ? "Já tem uma conta? Faça login" : "Ainda não tem uma conta? Registre-se"}
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
+
+      <Popup isOpen={popupOpen} message={popupMessage} onClose={handleClosePopup} />
     </main>
   );
 };
+
 export default LoginPage;
